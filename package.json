@@ -17,5 +17,16 @@
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csnotgo/goit-react-native-hw.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/csnotgo/goit-react-native-hw/issues"
+  },
+  "homepage": "https://github.com/csnotgo/goit-react-native-hw#readme",
+  "description": ""
 }
