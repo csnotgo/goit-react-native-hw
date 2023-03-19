@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -10,9 +10,9 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { styles } from "./RegistrationScreen.styles";
+import { styles } from "../RegistrationScreen/RegistrationScreen.styles";
 
-export const LoginScreen = () => {
+export const LoginScreen = ({ navigation }) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +22,15 @@ export const LoginScreen = () => {
     Email: false,
     Password: false,
   });
+
+  useEffect(() => {
+    const listenShow = Keyboard.addListener("keyboardDidShow", () => setKeyboardShow(true));
+    const listenHide = Keyboard.addListener("keyboardDidHide", () => setKeyboardShow(false));
+    return () => {
+      listenShow.remove();
+      listenHide.remove();
+    };
+  }, []);
 
   const showPassword = () => {
     setPasswordHide(!passwordHide);
@@ -43,6 +52,7 @@ export const LoginScreen = () => {
     setLogin("");
     setEmail("");
     setPassword("");
+    navigation.navigate("Home", { screen: "Posts" });
   };
 
   const onInputFocus = (textInput) => {
@@ -60,7 +70,7 @@ export const LoginScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={showKeyboard}>
       <View>
-        <ImageBackground style={styles.image} source={require("../assets/img/photo.BG.png")}>
+        <ImageBackground style={styles.image} source={require("../../assets/img/photo.BG.png")}>
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={-85}>
             <View style={{ ...styles.view, paddingBottom: keyboardShow ? 0 : 144, paddingTop: 32 }}>
               <Text style={styles.title}>Login</Text>
@@ -101,7 +111,9 @@ export const LoginScreen = () => {
                 <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={onSubmit}>
                   <Text style={styles.buttonText}>Sign in</Text>
                 </TouchableOpacity>
-                <Text style={{ ...styles.buttonText, color: "#1B4371" }}>You haven't account? Sign up</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
+                  <Text style={{ ...styles.buttonText, color: "#1B4371" }}>You haven't account? Sign up</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </KeyboardAvoidingView>

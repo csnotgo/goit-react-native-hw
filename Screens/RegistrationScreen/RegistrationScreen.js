@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
   ImageBackground,
   TextInput,
   TouchableOpacity,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 import { styles } from "./RegistrationScreen.styles";
+import { AntDesign } from "@expo/vector-icons";
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({ navigation }) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +24,15 @@ export const RegistrationScreen = () => {
     Email: false,
     Password: false,
   });
+
+  useEffect(() => {
+    const listenShow = Keyboard.addListener("keyboardDidShow", () => setKeyboardShow(true));
+    const listenHide = Keyboard.addListener("keyboardDidHide", () => setKeyboardShow(false));
+    return () => {
+      listenShow.remove();
+      listenHide.remove();
+    };
+  }, []);
 
   const showPassword = () => {
     setPasswordHide(!passwordHide);
@@ -45,6 +54,7 @@ export const RegistrationScreen = () => {
     setLogin("");
     setEmail("");
     setPassword("");
+    navigation.navigate("Home", { screen: "Posts" });
   };
 
   const onInputFocus = (textInput) => {
@@ -62,12 +72,12 @@ export const RegistrationScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={showKeyboard}>
       <View>
-        <ImageBackground style={styles.image} source={require("../assets/img/photo.BG.png")}>
+        <ImageBackground style={styles.image} source={require("../../assets/img/photo.BG.png")}>
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={-85}>
             <View style={{ ...styles.view, paddingBottom: keyboardShow ? 0 : 80 }}>
               <View style={styles.photoBox}>
                 <TouchableOpacity activeOpacity={0.8} style={styles.addPhoto}>
-                  <Image source={require("../assets/img/add.png")} style={{ width: 25, height: 25 }}></Image>
+                  <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
                 </TouchableOpacity>
               </View>
 
@@ -121,7 +131,10 @@ export const RegistrationScreen = () => {
                 <TouchableOpacity activeOpacity={0.8} style={styles.button} onPress={onSubmit}>
                   <Text style={styles.buttonText}>Sign up</Text>
                 </TouchableOpacity>
-                <Text style={{ ...styles.buttonText, color: "#1B4371" }}>Already have an account? Sign in</Text>
+
+                <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                  <Text style={{ ...styles.buttonText, color: "#1B4371" }}>Already have an account? Sign in</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </KeyboardAvoidingView>
