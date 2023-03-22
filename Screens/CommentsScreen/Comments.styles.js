@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
   },
   chat: {
-    height: "50%",
+    height: "40%",
   },
   input: {
     height: 50,

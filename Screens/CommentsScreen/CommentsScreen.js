@@ -11,14 +11,15 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import posts from "../../posts.json";
 import { styles } from "./Comments.styles";
 
-export const CommentsScreen = ({ _, route }) => {
+export const CommentsScreen = ({ route }) => {
   const [keyboardShow, setKeyboardShow] = useState(false);
+  const [comment, setComment] = useState(false);
 
-  const id = route.params.id;
-  const post = posts.find((post) => post.id === id);
+  // const id = route.params.id;
+  // const post = posts.find((post) => post.id === id);
+  const post = route.params;
 
   const showKeyboard = () => {
     setKeyboardShow(false);
@@ -32,10 +33,15 @@ export const CommentsScreen = ({ _, route }) => {
           <View style={styles.imgBox}>
             <Image style={styles.photo} source={{ uri: post.url }}></Image>
           </View>
+
+          {/* <View style={styles.chat}></View> */}
+
           <View>
             <TextInput
               placeholder="Comment..."
+              value={comment}
               style={styles.input}
+              onChangeText={(val) => setComment(val)}
               onFocus={() => setKeyboardShow(true)}
               onBlur={() => setKeyboardShow(false)}
             />

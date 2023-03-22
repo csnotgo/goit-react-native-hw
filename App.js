@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RegistrationScreen } from "./Screens/RegistrationScreen/RegistrationScreen";

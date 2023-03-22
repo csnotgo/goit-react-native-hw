@@ -8,17 +8,22 @@ export const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   photoBox: {
-    marginBottom: 32,
-  },
-  photo: {
-    justifyContent: "center",
-    alignItems: "center",
-    height: 240,
-
-    backgroundColor: "#F6F6F6",
     borderWidth: 1,
     borderRadius: 8,
     borderColor: "#E8E8E8",
+    overflow: "hidden",
+  },
+  camera: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: 240,
+    width: "100%",
+  },
+  photo: {
+    width: "100%",
+    height: 240,
+    position: "absolute",
+    borderRadius: 8,
   },
   icon: {
     width: 60,
@@ -31,6 +36,7 @@ export const styles = StyleSheet.create({
   },
   editText: {
     marginTop: 8,
+    marginBottom: 32,
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     color: "#BDBDBD",
@@ -40,8 +46,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 16,
     height: 50,
 
-    // fontFamily: "Roboto-Medium",
-    // fontWeight: 500,
     fontSize: 16,
     color: " #212121",
 
@@ -60,14 +64,12 @@ export const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 32,
 
-    backgroundColor: "#F6F6F6",
     borderRadius: 100,
   },
   buttonText: {
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     textAlign: "center",
-    color: "#BDBDBD",
   },
   delete: {
     height: 40,

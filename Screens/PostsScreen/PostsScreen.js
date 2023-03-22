@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { styles } from "./PostsScreen.styles";
-import posts from "../../posts.json";
 import { Item } from "../../components/Item/Item";
 
-export const PostsScreen = ({ navigation }) => {
+export const PostsScreen = ({ navigation, route }) => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    setPosts((prevState) => [...prevState, route.params]);
+  }, [route.params]);
+
   return (
     <View style={styles.view}>
       <View style={styles.container}>
@@ -18,7 +23,7 @@ export const PostsScreen = ({ navigation }) => {
         style={{ paddingHorizontal: 16 }}
         data={posts}
         renderItem={({ item }) => <Item post={item} navigation={navigation} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={() => Math.random().toString()}
       />
     </View>
   );

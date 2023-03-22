@@ -4,26 +4,35 @@ import { AntDesign, FontAwesome, Feather } from "@expo/vector-icons";
 import { styles } from "./Item.styles";
 
 export const Item = ({ post, navigation }) => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.imgBox}>
-        <Image style={styles.photo} source={{ uri: post.url }}></Image>
-      </View>
-      <Text style={styles.title}>{post.title}</Text>
-      <View style={styles.infoBox}>
-        <TouchableOpacity onPress={() => navigation.navigate("Comments", { id: post.id })} style={styles.infoBox}>
-          <FontAwesome name="comment" size={24} color={post.comments.length === 0 ? "#BDBDBD" : "#FF6C00"} />
-          <Text style={styles.text}>{post.comments.length}</Text>
-        </TouchableOpacity>
+  if (post) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.imgBox}>
+          <Image style={styles.photo} source={{ uri: post.url }}></Image>
+        </View>
+        <Text style={styles.title}>{post.title}</Text>
+        <View style={styles.infoBox}>
+          <TouchableOpacity onPress={() => navigation.navigate("Comments", { url: post.url })} style={styles.infoBox}>
+            <FontAwesome name="comment" size={24} color="#BDBDBD" />
+            <Text style={styles.text}>0</Text>
+          </TouchableOpacity>
 
-        <AntDesign name="like2" size={24} color="#FF6C00" />
-        <Text style={{ ...styles.text, marginRight: "auto" }}>{post.likes}</Text>
+          {post.likes && (
+            <TouchableOpacity style={styles.infoBox}>
+              <AntDesign name="like2" size={24} color="#FF6C00" />
+              <Text style={styles.text}>{post.likes}</Text>
+            </TouchableOpacity>
+          )}
 
-        <TouchableOpacity onPress={() => navigation.navigate("Map")} style={styles.infoBox}>
-          <Feather name="map-pin" size={18} color="#BDBDBD" />
-          <Text style={styles.location}>{post.location}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Map", { coords: post.coords })}
+            style={{ ...styles.infoBox, marginLeft: "auto" }}
+          >
+            <Feather name="map-pin" size={18} color="#BDBDBD" />
+            <Text style={styles.location}>{post.location}</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-  );
+    );
+  }
 };
