@@ -9,11 +9,17 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import { styles } from "./RegistrationScreen.styles";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { authRegister } from "../../redux/auth/auth-operations";
+import { setUserAvatar } from "../../redux/auth/auth-slice";
+import * as ImagePicker from "expo-image-picker";
 
 export const RegistrationScreen = ({ navigation }) => {
+  const [avatar, setAvatar] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,6 +31,8 @@ export const RegistrationScreen = ({ navigation }) => {
     Password: false,
   });
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const listenShow = Keyboard.addListener("keyboardDidShow", () => setKeyboardShow(true));
     const listenHide = Keyboard.addListener("keyboardDidHide", () => setKeyboardShow(false));
@@ -33,6 +41,19 @@ export const RegistrationScreen = ({ navigation }) => {
       listenHide.remove();
     };
   }, []);
+
+  const addAvatar = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setAvatar(result.assets[0].uri);
+    }
+  };
 
   const showPassword = () => {
     setPasswordHide(!passwordHide);
@@ -44,17 +65,13 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const onSubmit = () => {
-    const form = {
-      login,
-      email,
-      password,
-    };
     showKeyboard();
-    console.log(form);
+    dispatch(authRegister({ email, password, login }));
+    dispatch(setUserAvatar(avatar));
+
     setLogin("");
     setEmail("");
     setPassword("");
-    navigation.navigate("Home", { screen: "Posts" });
   };
 
   const onInputFocus = (textInput) => {
@@ -76,8 +93,13 @@ export const RegistrationScreen = ({ navigation }) => {
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={-85}>
             <View style={{ ...styles.view, paddingBottom: keyboardShow ? 0 : 80 }}>
               <View style={styles.photoBox}>
-                <TouchableOpacity activeOpacity={0.8} style={styles.addPhoto}>
-                  <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
+                {avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
+                <TouchableOpacity activeOpacity={0.8} style={styles.addPhoto} onPress={addAvatar}>
+                  {!avatar ? (
+                    <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
+                  ) : (
+                    <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
+                  )}
                 </TouchableOpacity>
               </View>
 

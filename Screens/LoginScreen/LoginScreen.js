@@ -10,10 +10,11 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { authLogin } from "../../redux/auth/auth-operations";
 import { styles } from "../RegistrationScreen/RegistrationScreen.styles";
 
 export const LoginScreen = ({ navigation }) => {
-  const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHide, setPasswordHide] = useState(true);
@@ -22,6 +23,8 @@ export const LoginScreen = ({ navigation }) => {
     Email: false,
     Password: false,
   });
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const listenShow = Keyboard.addListener("keyboardDidShow", () => setKeyboardShow(true));
@@ -42,17 +45,11 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   const onSubmit = () => {
-    const form = {
-      login,
-      email,
-      password,
-    };
     showKeyboard();
-    console.log(form);
-    setLogin("");
+    dispatch(authLogin({ email, password }));
+
     setEmail("");
     setPassword("");
-    navigation.navigate("Home", { screen: "Posts" });
   };
 
   const onInputFocus = (textInput) => {

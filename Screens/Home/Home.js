@@ -1,6 +1,10 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { TouchableOpacity, View } from "react-native";
+import { auth } from "../../firebase/config";
+import { authLogout } from "../../redux/auth/auth-operations";
+import { setCredentials } from "../../redux/auth/auth-slice";
 import { PostsScreen } from "../PostsScreen/PostsScreen";
 import { CreatePostsScreen } from "../CreatePostsScreen/CreatePostsScreen";
 import { ProfileScreen } from "../ProfileScreen/ProfileScreen";
@@ -10,9 +14,13 @@ import { styles } from "./Home.styles";
 const Tabs = createBottomTabNavigator();
 
 export const Home = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const user = auth.currentUser;
+  dispatch(setCredentials(user));
+
   const logout = () => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate("Login")} style={{ marginRight: 10 }}>
+      <TouchableOpacity onPress={() => dispatch(authLogout())} style={{ marginRight: 10 }}>
         <MaterialIcons name="logout" size={24} color="#BDBDBD" />
       </TouchableOpacity>
     );
@@ -76,6 +84,7 @@ export const Home = ({ navigation }) => {
           headerLeft: backArrow,
           tabBarButton: createPost,
           tabBarStyle: { display: "none" },
+          unmountOnBlur: true,
         }}
       />
       <Tabs.Screen

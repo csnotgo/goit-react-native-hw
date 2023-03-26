@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({
     height: 240,
     position: "absolute",
     borderRadius: 8,
+    zIndex: 1,
   },
   icon: {
     width: 60,

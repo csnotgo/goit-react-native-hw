@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   view: {
     height: "100%",
-    // paddingHorizontal: 16,
     paddingTop: 32,
     backgroundColor: "#FFFFFF",
   },
@@ -18,6 +17,13 @@ export const styles = StyleSheet.create({
 
     borderRadius: 16,
     backgroundColor: "#E8E8E8",
+  },
+  avatar: {
+    position: "absolute",
+    zIndex: 1,
+    width: 60,
+    height: 60,
+    borderRadius: 16,
   },
   infoBox: {
     marginLeft: 8,

@@ -24,8 +24,16 @@ export const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 16,
   },
+  avatar: {
+    position: "absolute",
+    zIndex: 1,
+    width: 120,
+    height: 120,
+    borderRadius: 16,
+  },
   addPhoto: {
     position: "absolute",
+    zIndex: 2,
     bottom: 14,
     right: -12.5,
     width: 25,

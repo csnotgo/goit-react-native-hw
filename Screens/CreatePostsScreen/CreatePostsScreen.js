@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
-
+import { firestore, storage } from "../../firebase/config";
 import {
   Image,
   Keyboard,
@@ -17,6 +17,9 @@ import {
 } from "react-native";
 import { FontAwesome, SimpleLineIcons, FontAwesome5 } from "@expo/vector-icons";
 import { styles } from "./CreatePost.styles";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { addDoc, collection } from "firebase/firestore";
+import { useSelector } from "react-redux";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [keyboardShow, setKeyboardShow] = useState(false);
@@ -29,6 +32,8 @@ export const CreatePostsScreen = ({ navigation }) => {
     latitude: 0,
     longitude: 0,
   });
+
+  const { id, name, avatar } = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     (async () => {
@@ -53,7 +58,8 @@ export const CreatePostsScreen = ({ navigation }) => {
   };
 
   const publishPost = () => {
-    navigation.navigate("Posts", { url: photo, title: title, location: location, coords: coordinates });
+    uploadPost();
+    navigation.navigate("Posts");
     setPhoto("");
     setTitle("");
     setLocation("");
@@ -65,14 +71,30 @@ export const CreatePostsScreen = ({ navigation }) => {
     setLocation("");
   };
 
+  const uploadFile = async () => {
+    const res = await fetch(photo);
+    const file = await res.blob();
+    const id = Date.now().toString();
+    const photoRef = ref(storage, `postImages/${id}`);
+    await uploadBytes(photoRef, file);
+    const fileURL = await getDownloadURL(photoRef);
+    return fileURL;
+  };
+
+  const uploadPost = async () => {
+    const fileUrl = await uploadFile();
+    const db = await collection(firestore, "posts");
+    addDoc(db, { fileUrl, title, location, coordinates, userId: id, name, avatar });
+  };
+
   return (
     <TouchableWithoutFeedback onPress={showKeyboard}>
       <ScrollView style={{ backgroundColor: "#FFFFFF", height: "100%" }}>
         <View style={{ ...styles.view, paddingBottom: keyboardShow ? 60 : 34 }}>
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
             <View style={styles.photoBox}>
-              <Camera style={styles.camera} ref={setCamera}>
-                {photo && <Image source={{ uri: photo }} style={styles.photo}></Image>}
+              {photo && <Image source={{ uri: photo }} style={styles.photo}></Image>}
+              <Camera style={styles.camera} ref={setCamera} onCameraReady={() => true}>
                 <TouchableOpacity onPress={takePhoto} disabled={photo ? true : false}>
                   <View style={styles.icon}>
                     <FontAwesome name="camera" size={24} color="#BDBDBD" />
