@@ -16,7 +16,10 @@ export const PostsScreen = ({ navigation }) => {
 
   useEffect(() => {
     getAllPosts();
-    uploadFile();
+
+    if (avatar) {
+      uploadFile();
+    }
   }, []);
 
   const getAllPosts = async () => {
