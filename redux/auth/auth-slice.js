@@ -25,6 +25,7 @@ export const authSlice = createSlice({
       if (!state.user.id) state.user.id = payload.uid;
       if (!state.user.name) state.user.name = payload.displayName;
       if (!state.user.email) state.user.email = payload.email;
+      if (!state.user.avatar) state.user.avatar = payload.avatar;
     },
     setUserAvatar(state, { payload }) {
       state.user.avatar = payload;
