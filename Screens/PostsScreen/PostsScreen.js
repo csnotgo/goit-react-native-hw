@@ -1,25 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { FlatList, Image, Text, View } from "react-native";
 import { styles } from "./PostsScreen.styles";
 import { Item } from "../../components/Item/Item";
 import { collection, onSnapshot } from "firebase/firestore";
-import { firestore, storage } from "../../firebase/config";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { setUserAvatar } from "../../redux/auth/auth-slice";
+import { firestore } from "../../firebase/config";
 
 export const PostsScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const { name, email, avatar } = useSelector((state) => state.auth.user);
 
-  const dispatch = useDispatch();
-
   useEffect(() => {
     getAllPosts();
-
-    if (avatar) {
-      uploadFile();
-    }
   }, []);
 
   const getAllPosts = async () => {
@@ -27,16 +19,6 @@ export const PostsScreen = ({ navigation }) => {
     await onSnapshot(db, (data) => {
       setPosts(data.docs.map((item) => ({ ...item.data(), id: item.id })));
     });
-  };
-
-  const uploadFile = async () => {
-    const res = await fetch(avatar);
-    const file = await res.blob();
-    const id = Date.now().toString();
-    const photoRef = ref(storage, `usersAvatars/${id}`);
-    await uploadBytes(photoRef, file);
-    const fileURL = await getDownloadURL(photoRef);
-    dispatch(setUserAvatar(fileURL));
   };
 
   return (

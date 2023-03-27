@@ -15,8 +15,9 @@ import { styles } from "./RegistrationScreen.styles";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch } from "react-redux";
 import { authRegister } from "../../redux/auth/auth-operations";
-import { setUserAvatar } from "../../redux/auth/auth-slice";
 import * as ImagePicker from "expo-image-picker";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../../firebase/config";
 
 export const RegistrationScreen = ({ navigation }) => {
   const [avatar, setAvatar] = useState("");
@@ -64,14 +65,28 @@ export const RegistrationScreen = ({ navigation }) => {
     Keyboard.dismiss();
   };
 
-  const onSubmit = () => {
-    showKeyboard();
-    dispatch(authRegister({ email, password, login }));
-    dispatch(setUserAvatar(avatar));
+  const uploadFile = async () => {
+    const res = await fetch(avatar);
+    const file = await res.blob();
+    const id = Date.now().toString();
+    const photoRef = ref(storage, `usersAvatars/${id}`);
+    await uploadBytes(photoRef, file);
+    const fileURL = await getDownloadURL(photoRef);
+    return fileURL;
+  };
 
-    setLogin("");
-    setEmail("");
-    setPassword("");
+  const onSubmit = async () => {
+    try {
+      showKeyboard();
+      const photoURL = await uploadFile();
+      dispatch(authRegister({ email, password, login, photoURL }));
+
+      setLogin("");
+      setEmail("");
+      setPassword("");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onInputFocus = (textInput) => {

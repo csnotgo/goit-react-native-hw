@@ -38,7 +38,7 @@ export const CommentsScreen = ({ route }) => {
     const db = await collection(firestore, "posts");
     const item = await doc(db, postId);
     const comments = await collection(item, "comments");
-    addDoc(comments, { comment, createdAt: Date.now(), userId: id, avatar: avatar });
+    addDoc(comments, { comment, createdAt: Date.now(), userId: id, avatar });
     setComment("");
   };
 

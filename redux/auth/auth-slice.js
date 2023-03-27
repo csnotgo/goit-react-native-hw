@@ -25,16 +25,16 @@ export const authSlice = createSlice({
       if (!state.user.id) state.user.id = payload.uid;
       if (!state.user.name) state.user.name = payload.displayName;
       if (!state.user.email) state.user.email = payload.email;
-      if (!state.user.avatar) state.user.avatar = payload.avatar;
-    },
-    setUserAvatar(state, { payload }) {
-      state.user.avatar = payload;
+      if (!state.user.avatar) state.user.avatar = payload.photoURL;
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(authRegister.pending, handlePending)
-      .addCase(authRegister.fulfilled, handleFulfilled)
+      .addCase(authRegister.fulfilled, (state, action) => {
+        handleFulfilled(state, action);
+        state.user.avatar = action.payload.photoURL;
+      })
       .addCase(authRegister.rejected, handleRejected)
       .addCase(authLogin.pending, handlePending)
       .addCase(authLogin.fulfilled, handleFulfilled)

@@ -5,7 +5,6 @@ import { styles } from "./Comment.styles";
 
 export const Comment = ({ item }) => {
   const { id } = useSelector((state) => state.auth.user);
-  console.log(item);
 
   const user = item.userId === id;
 

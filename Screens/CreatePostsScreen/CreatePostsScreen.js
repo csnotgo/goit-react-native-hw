@@ -33,7 +33,7 @@ export const CreatePostsScreen = ({ navigation }) => {
     longitude: 0,
   });
 
-  const { id, name, avatar } = useSelector((state) => state.auth.user);
+  const { id, name } = useSelector((state) => state.auth.user);
 
   useEffect(() => {
     (async () => {
@@ -84,7 +84,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const uploadPost = async () => {
     const fileUrl = await uploadFile();
     const db = await collection(firestore, "posts");
-    addDoc(db, { fileUrl, title, location, coordinates, userId: id, name, avatar });
+    addDoc(db, { fileUrl, title, location, coordinates, userId: id, name });
   };
 
   return (
