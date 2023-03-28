@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { AntDesign, FontAwesome, Feather } from "@expo/vector-icons";
+import { FontAwesome, Feather } from "@expo/vector-icons";
 import { styles } from "./Item.styles";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 
 export const Item = ({ post, navigation }) => {
   const [total, setTotal] = useState(0);
-  const { id } = post;
+
+  const { id, fileUrl, avatar, title, coordinates, location } = post;
 
   useEffect(() => {
     const colRef = collection(firestore, "posts");
@@ -20,31 +21,24 @@ export const Item = ({ post, navigation }) => {
     return (
       <View style={styles.container}>
         <View style={styles.imgBox}>
-          <Image style={styles.photo} source={{ uri: post.fileUrl }}></Image>
+          <Image style={styles.photo} source={{ uri: fileUrl }}></Image>
         </View>
-        <Text style={styles.title}>{post.title}</Text>
+        <Text style={styles.title}>{title}</Text>
         <View style={styles.infoBox}>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Comments", { postId: post.id, url: post.fileUrl, avatar: post.avatar })}
+            onPress={() => navigation.navigate("Comments", { postId: id, url: fileUrl, avatar: avatar })}
             style={styles.infoBox}
           >
             <FontAwesome name="comment" size={24} color={!total ? "#BDBDBD" : "#FF6C00"} />
             <Text style={styles.text}>{total}</Text>
           </TouchableOpacity>
 
-          {/* {post?.likes && (
-            <TouchableOpacity style={styles.infoBox}>
-              <AntDesign name="like2" size={24} color="#FF6C00" />
-              <Text style={styles.text}>{post.likes}</Text>
-            </TouchableOpacity>
-          )} */}
-
           <TouchableOpacity
-            onPress={() => navigation.navigate("Map", { coords: post.coordinates })}
+            onPress={() => navigation.navigate("Map", { coords: coordinates })}
             style={{ ...styles.infoBox, marginLeft: "auto" }}
           >
             <Feather name="map-pin" size={18} color="#BDBDBD" />
-            <Text style={styles.location}>{post.location}</Text>
+            <Text style={styles.location}>{location}</Text>
           </TouchableOpacity>
         </View>
       </View>

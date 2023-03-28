@@ -8,9 +8,11 @@ const handleFulfilled = (state, action) => {
   state.user.id = action.payload.uid;
   state.user.name = action.payload.displayName;
   state.user.email = action.payload.email;
+  state.isLoading = false;
 };
 const handleRejected = (state, action) => {
   state.error = action.payload;
+  state.isLoading = false;
 };
 
 export const authSlice = createSlice({
@@ -45,6 +47,7 @@ export const authSlice = createSlice({
         state.user.name = "";
         state.user.email = "";
         state.user.photo = "";
+        state.isLoading = false;
       })
       .addCase(authLogout.rejected, handleRejected);
   },

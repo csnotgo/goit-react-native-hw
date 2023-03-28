@@ -18,6 +18,8 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: -60,
     alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
 
     width: 120,
     height: 120,
@@ -52,5 +54,17 @@ export const styles = StyleSheet.create({
     fontSize: 30,
     textAlign: "center",
     color: "#212121",
+  },
+  noPostsView: {
+    height: "100%",
+    justifyContent: "space-between",
+    paddingHorizontal: 40,
+    paddingVertical: 60,
+  },
+  noPostsMessage: {
+    textAlign: "center",
+    fontFamily: "Roboto-Regular",
+    fontSize: 18,
+    color: "rgba(0, 0, 0, 0.8)",
   },
 });

@@ -5,15 +5,16 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
+  Text,
   TextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from "./CommentsScreen.styles";
-import { addDoc, collection, doc, onSnapshot } from "firebase/firestore";
+import { addDoc, collection, doc, onSnapshot, orderBy, query } from "firebase/firestore";
 import { firestore } from "../../firebase/config";
 import { Comment } from "../../components/Comment/Comment";
 
@@ -46,7 +47,8 @@ export const CommentsScreen = ({ route }) => {
     const db = await collection(firestore, "posts");
     const item = await doc(db, postId);
     const comments = await collection(item, "comments");
-    await onSnapshot(comments, (data) => {
+    const q = query(comments, orderBy("createdAt"));
+    await onSnapshot(q, (data) => {
       setCommentsList(data.docs.map((doc) => ({ ...doc.data() })));
     });
   };
@@ -60,11 +62,18 @@ export const CommentsScreen = ({ route }) => {
           </View>
 
           <SafeAreaView style={styles.chat}>
-            <FlatList
-              data={commentsList}
-              renderItem={({ item }) => <Comment item={item} />}
-              keyExtractor={() => Math.random().toString()}
-            ></FlatList>
+            {commentsList.length === 0 ? (
+              <View style={{ alignItems: "center" }}>
+                <Text style={styles.noComments}>There is no comments yet</Text>
+                <MaterialCommunityIcons name="emoticon-sad-outline" size={30} color="#BDBDBD" />
+              </View>
+            ) : (
+              <FlatList
+                data={commentsList}
+                renderItem={({ item }) => <Comment item={item} />}
+                keyExtractor={() => Math.random().toString()}
+              ></FlatList>
+            )}
           </SafeAreaView>
 
           <View>

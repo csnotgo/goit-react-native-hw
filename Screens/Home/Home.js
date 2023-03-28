@@ -16,6 +16,7 @@ const Tabs = createBottomTabNavigator();
 export const Home = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = auth.currentUser;
+
   dispatch(setCredentials(user));
 
   const logout = () => {

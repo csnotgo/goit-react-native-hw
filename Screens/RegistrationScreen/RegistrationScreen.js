@@ -13,11 +13,12 @@ import {
 } from "react-native";
 import { styles } from "./RegistrationScreen.styles";
 import { AntDesign } from "@expo/vector-icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authRegister } from "../../redux/auth/auth-operations";
 import * as ImagePicker from "expo-image-picker";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../../firebase/config";
+import { Loader } from "../../components/Loader/Loader";
 
 export const RegistrationScreen = ({ navigation }) => {
   const [avatar, setAvatar] = useState("");
@@ -32,6 +33,7 @@ export const RegistrationScreen = ({ navigation }) => {
     Password: false,
   });
 
+  const { isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -66,6 +68,8 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   const uploadFile = async () => {
+    if (!avatar) return;
+
     const res = await fetch(avatar);
     const file = await res.blob();
     const id = Date.now().toString();
@@ -95,6 +99,7 @@ export const RegistrationScreen = ({ navigation }) => {
       [textInput]: true,
     });
   };
+
   const onInputBlur = (textInput) => {
     setOnFocus({
       [textInput]: false,
@@ -105,17 +110,21 @@ export const RegistrationScreen = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={showKeyboard}>
       <View>
         <ImageBackground style={styles.image} source={require("../../assets/img/photo.BG.png")}>
+          {isLoading && <Loader />}
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={-85}>
             <View style={{ ...styles.view, paddingBottom: keyboardShow ? 0 : 80 }}>
               <View style={styles.photoBox}>
+                <AntDesign name="user" size={50} color="#BDBDBD" />
                 {avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
-                <TouchableOpacity activeOpacity={0.8} style={styles.addPhoto} onPress={addAvatar}>
-                  {!avatar ? (
+                {!avatar ? (
+                  <TouchableOpacity activeOpacity={0.8} style={styles.addPhoto} onPress={addAvatar}>
                     <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
-                  ) : (
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity activeOpacity={0.8} style={styles.addPhoto} onPress={() => setAvatar("")}>
                     <AntDesign name="closecircleo" size={25} color="#BDBDBD" />
-                  )}
-                </TouchableOpacity>
+                  </TouchableOpacity>
+                )}
               </View>
 
               <Text style={styles.title}>Registration</Text>

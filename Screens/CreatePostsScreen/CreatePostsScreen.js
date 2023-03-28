@@ -20,6 +20,7 @@ import { styles } from "./CreatePost.styles";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { useSelector } from "react-redux";
+import { showToast } from "../../helpers/showToast";
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [keyboardShow, setKeyboardShow] = useState(false);
@@ -63,6 +64,8 @@ export const CreatePostsScreen = ({ navigation }) => {
     setPhoto("");
     setTitle("");
     setLocation("");
+
+    showToast("ok", "Post create succsessfuly, please, wait a few seconds");
   };
 
   const deletePost = () => {
@@ -84,7 +87,7 @@ export const CreatePostsScreen = ({ navigation }) => {
   const uploadPost = async () => {
     const fileUrl = await uploadFile();
     const db = await collection(firestore, "posts");
-    addDoc(db, { fileUrl, title, location, coordinates, userId: id, name });
+    addDoc(db, { fileUrl, title, location, coordinates, userId: id, name, createdAt: Date.now() });
   };
 
   return (

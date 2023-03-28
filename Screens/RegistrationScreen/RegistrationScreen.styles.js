@@ -18,6 +18,8 @@ export const styles = StyleSheet.create({
     position: "absolute",
     top: -60,
     alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
 
     width: 120,
     height: 120,

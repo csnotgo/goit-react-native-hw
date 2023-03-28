@@ -5,6 +5,8 @@ import * as Font from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { store } from "./redux/store";
 import { Routing } from "./components/Routing/Routing";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "./helpers/toastConfig";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,6 +44,7 @@ export default function App() {
     <Provider store={store}>
       <View style={styles.container} onLayout={onLayoutRootView}>
         <Routing />
+        <Toast config={toastConfig} />
       </View>
     </Provider>
   );

@@ -5,7 +5,9 @@ export const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 50,
-    backgroundColor: "#BDBDBD",
+    backgroundColor: "#F6F6F6",
+    alignItems: "center",
+    justifyContent: "center",
   },
   avatar: {
     position: "absolute",

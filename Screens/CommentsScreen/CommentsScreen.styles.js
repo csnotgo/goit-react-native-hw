@@ -18,6 +18,15 @@ export const styles = StyleSheet.create({
   },
   chat: {
     flex: 1,
+    justifyContent: "center",
+  },
+  noComments: {
+    marginBottom: 10,
+    fontFamily: "Roboto-Medium",
+    fontWeight: "500",
+    fontSize: 20,
+    textAlign: "center",
+    color: "#BDBDBD",
   },
   input: {
     height: 50,

@@ -2,16 +2,17 @@ import React from "react";
 import { Image, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { styles } from "./Comment.styles";
+import { AntDesign } from "@expo/vector-icons";
 
 export const Comment = ({ item }) => {
   const { id } = useSelector((state) => state.auth.user);
 
   const user = item.userId === id;
-
   return (
     <View style={{ flex: 1, alignItems: user ? "flex-end" : "flex-start" }}>
       <View style={{ marginBottom: 24, flexDirection: user ? "row-reverse" : "row" }}>
         <View style={{ ...styles.photo, marginLeft: user ? 16 : 0, marginRight: user ? 0 : 16 }}>
+          <AntDesign name="user" size={14} color="#BDBDBD" />
           {item.avatar && <Image source={{ uri: item.avatar }} style={styles.avatar} />}
         </View>
         <View

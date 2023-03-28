@@ -10,8 +10,9 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authLogin } from "../../redux/auth/auth-operations";
+import { Loader } from "../../components/Loader/Loader";
 import { styles } from "../RegistrationScreen/RegistrationScreen.styles";
 
 export const LoginScreen = ({ navigation }) => {
@@ -24,6 +25,7 @@ export const LoginScreen = ({ navigation }) => {
     Password: false,
   });
 
+  const { isLoading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -58,6 +60,7 @@ export const LoginScreen = ({ navigation }) => {
       [textInput]: true,
     });
   };
+
   const onInputBlur = (textInput) => {
     setOnFocus({
       [textInput]: false,
@@ -68,6 +71,7 @@ export const LoginScreen = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={showKeyboard}>
       <View>
         <ImageBackground style={styles.image} source={require("../../assets/img/photo.BG.png")}>
+          {isLoading && <Loader />}
           <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={-85}>
             <View style={{ ...styles.view, paddingBottom: keyboardShow ? 0 : 144, paddingTop: 32 }}>
               <Text style={styles.title}>Login</Text>
